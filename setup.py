@@ -13,5 +13,6 @@ setup(
     scripts="""
         ./scripts/softmax
         ./scripts/CNN
+        ./scripts/decision_tree
     """.split(),
 )

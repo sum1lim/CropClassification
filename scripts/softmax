@@ -5,7 +5,7 @@ import numpy as np
 import torch
 import torch.optim as optim
 from torch import nn
-from crop_classification.utils import read_data, TorchDataset
+from crop_classification.utils import read_data, TorchDataset, accuracy
 from torch.utils.data import DataLoader
 
 
@@ -90,11 +90,8 @@ def main(args):
             )
 
             y_val_hat = torch.argmax(y_val_hat, dim=1)
-            match = y_val.to(device, dtype=torch.float32) - y_val_hat
-            match[match != 0] = -1
-            match += 1
 
-            acc = torch.sum(match) / match.shape[0]
+            acc = accuracy(y_val.to(device, dtype=torch.float32), y_val_hat)
 
             val_loss += loss * len(X_val)
             val_acc += acc * len(X_val)
@@ -110,11 +107,8 @@ def main(args):
 
     y_te_hat = best_model((torch.tensor(X_te).to(device, dtype=torch.float32)))
     y_te_hat = torch.argmax(y_te_hat, dim=1)
-    match = torch.tensor(Y_te).to(device, dtype=torch.float32) - y_te_hat
-    match[match != 0] = -1
-    match += 1
 
-    acc = torch.sum(match) / match.shape[0]
+    acc = accuracy(torch.tensor(Y_te).to(device, dtype=torch.float32), y_te_hat)
 
     print(f"Test accuracy: {acc}")
 

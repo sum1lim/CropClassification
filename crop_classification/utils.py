@@ -41,26 +41,11 @@ class TorchDataset(Dataset):
         return len(self.X)
 
 
-def softmax(X, W, t=None):
-    # X_new: Nsample x (d+1)
-    # W: (d+1) x K
-
-    # TODO Your code here
-    z = np.dot(X, W)
-    z -= np.array([np.max(z, axis=1)]).T
-
-    y = np.exp(z) / np.array([np.sum(np.exp(z), axis=1)]).T
-    t_hat = np.array([np.argmax(y, 1)]).T
-
-    y[y < 1e-16] = 1e-16
-
-    t_onehot = np.eye(7)[t.T[0]]
-    loss = -np.sum(np.log(y) * t_onehot)
-
-    match = t - t_hat.T[0]
+def accuracy(y, y_hat):
+    match = y - y_hat
     match[match != 0] = -1
     match += 1
 
-    acc = np.sum(match) / match.shape[0]
+    acc = match.sum() / match.shape[0]
 
-    return y, t_hat, loss, acc
+    return acc

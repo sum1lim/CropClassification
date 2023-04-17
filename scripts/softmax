@@ -14,7 +14,7 @@ class softmax_model(nn.Module):
         self.device = device
         super().__init__()
 
-        self.linear = nn.Linear(174, 7).to(self.device, dtype=torch.float32)
+        self.linear = nn.Linear(12, 7).to(self.device, dtype=torch.float32)
         self.softmax = nn.Softmax(dim=1).to(self.device, dtype=torch.float32)
 
     def forward(self, X):
@@ -40,13 +40,13 @@ def main(args):
     train_data_loader = DataLoader(
         train_dataset,
         num_workers=0,
-        batch_size=128,
+        batch_size=64,
         shuffle=True,
         drop_last=True,
     )
     val_data_loader = DataLoader(
         val_dataset,
-        batch_size=128,
+        batch_size=64,
         num_workers=0,
         shuffle=True,
         drop_last=True,
@@ -99,7 +99,7 @@ def main(args):
             val_count += len(X_val)
 
         print(
-            f"Validation Loss: {val_loss / val_count} / Accuracy: {val_acc / val_count}"
+            f"Epoch {epoch}: Validation Loss: {val_loss / val_count} / Accuracy: {val_acc / val_count}"
         )
 
     y_te_hat = model((torch.tensor(X_te).to(device, dtype=torch.float32)))

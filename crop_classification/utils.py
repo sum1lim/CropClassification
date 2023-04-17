@@ -10,7 +10,9 @@ from torch.utils.data import Dataset
 def read_data(undersampling=True):
     df = pd.read_csv("./data/WinnipegDataset.txt")
     Y = df["label"] - 1
-    X = df.drop(["label"], axis=1)
+    X = df.drop(["label"], axis=1)[
+        [f"f{i + j}" for j in [1, 50, 99, 137] for i in range(3)]
+    ]
     X = (X - X.min(0)) / (X.max(0) - X.min(0))
     print(Y.value_counts())
 

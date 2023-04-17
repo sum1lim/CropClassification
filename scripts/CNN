@@ -127,7 +127,7 @@ def main(args):
     X_te = torch.tensor(X_te)
     X_te = X_te.reshape(len(X_te), 2, 6)
     y_pred = best_model((torch.tensor(X_te).to(device, dtype=torch.float32)))
-    y_pred = torch.argmax(y_te_hat, dim=1)
+    y_pred = torch.argmax(y_pred, dim=1)
 
     acc = accuracy_score(y_pred, y_te)
     p, r, f, _ = precision_recall_fscore_support(y_pred, y_te)

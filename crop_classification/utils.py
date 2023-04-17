@@ -1,8 +1,10 @@
 import math
+import torch
 import numpy as np
 import pandas as pd
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn.model_selection import train_test_split
+from torch.utils.data import Dataset
 
 
 def read_data():
@@ -20,12 +22,28 @@ def read_data():
     return X_tr.values, X_te.values, Y_tr.values, Y_te.values
 
 
+class TorchDataset(Dataset):
+    def __init__(self, X, Y):
+        self.X = X
+        self.Y = Y
+
+    def __getitem__(self, idx):
+        if torch.is_tensor(idx):
+            idx = idx.tolist()
+
+        return self.X[idx], self.Y[idx]
+
+    def __len__(self):
+        return len(self.X)
+
+
 def softmax(X, W, t=None):
     # X_new: Nsample x (d+1)
     # W: (d+1) x K
 
     # TODO Your code here
     z = np.dot(X, W)
+    print(z.shape)
     z -= np.array([np.max(z, axis=1)]).T
 
     y = np.exp(z) / np.array([np.sum(np.exp(z), axis=1)]).T

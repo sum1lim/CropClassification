@@ -1,0 +1,125 @@
+#!/usr/bin/env python3
+import argparse
+import pandas as pd
+import numpy as np
+import torch
+import torch.optim as optim
+from torch import nn
+from crop_classification.utils import read_data, TorchDataset
+from torch.utils.data import DataLoader
+
+
+class NN(nn.Module):
+    def __init__(self, device):
+        self.device = device
+        super().__init__()
+
+        self.mlp = nn.Sequential(
+            nn.Linear(174, 64),
+            nn.ReLU(),
+            nn.Linear(64, 16),
+            nn.ReLU(),
+            nn.Linear(16, 7),
+        ).to(self.device, dtype=torch.float32)
+
+        self.linear = nn.Linear(174, 7).to(self.device, dtype=torch.float32)
+        self.softmax = nn.Softmax(dim=1).to(self.device, dtype=torch.float32)
+
+    def forward(self, X):
+        return self.softmax(self.mlp(X))
+
+
+def main(args):
+    torch.cuda.empty_cache()
+    torch.autograd.set_detect_anomaly(True)
+    torch.multiprocessing.set_start_method("spawn")
+    if torch.backends.mps.is_available():
+        device = "mps"
+    elif torch.cuda.is_available():
+        device = "cuda"
+    else:
+        device = "cpu"
+    print(device)
+
+    X_tr, X_te, Y_tr, Y_te = read_data()
+
+    train_data = TorchDataset(X_tr, Y_tr)
+    train_dataset, val_dataset = torch.utils.data.random_split(train_data, [0.8, 0.2])
+    train_data_loader = DataLoader(
+        train_dataset,
+        num_workers=0,
+        batch_size=64,
+        shuffle=True,
+        drop_last=True,
+    )
+    val_data_loader = DataLoader(
+        val_dataset,
+        batch_size=64,
+        num_workers=0,
+        shuffle=True,
+        drop_last=True,
+    )
+
+    model = nn.DataParallel(NN(device)).to(device, dtype=torch.float32)
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.0001)
+    scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.8, verbose=True)
+    criterion = nn.CrossEntropyLoss().to(device, dtype=torch.float32)
+
+    for epoch in range(100):
+        for X_batch, y_batch in train_data_loader:
+            y_hat = model((X_batch.to(device, dtype=torch.float32)))
+
+            optimizer.zero_grad()
+
+            loss = criterion(
+                y_hat,
+                nn.functional.one_hot(y_batch.long() % 7, num_classes=7).to(
+                    device, dtype=torch.float32
+                ),
+            )
+            loss.backward()
+            optimizer.step()
+
+        scheduler.step()
+
+        val_acc = 0.0
+        val_count = 0.0
+        val_loss = 0.0
+        for X_val, y_val in val_data_loader:
+            y_val_hat = model((X_val.to(device, dtype=torch.float32)))
+
+            loss = criterion(
+                y_val_hat,
+                nn.functional.one_hot(y_val.long() % 7, num_classes=7).to(
+                    device, dtype=torch.float32
+                ),
+            )
+
+            t_hat = torch.argmax(y_val_hat, dim=1)
+            match = y_val.to(device, dtype=torch.float32) - t_hat
+            match[match != 0] = -1
+            match += 1
+
+            acc = torch.sum(match) / match.shape[0]
+
+            val_loss += loss * len(X_val)
+            val_acc += acc * len(X_val)
+            val_count += len(X_val)
+
+        print(
+            f"Validation Loss: {val_loss / val_count} / Accuracy: {val_acc / val_count}"
+        )
+
+
+if __name__ == "__main__":
+    parser = argparse.ArgumentParser()
+
+    parser.add_argument(
+        "--input",
+        type=str,
+        help="Input file name",
+    )
+
+    args = parser.parse_args()
+
+    main(args)

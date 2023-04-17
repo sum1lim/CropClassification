@@ -22,7 +22,6 @@ class NN(nn.Module):
             nn.Linear(16, 7),
         ).to(self.device, dtype=torch.float32)
 
-        self.linear = nn.Linear(174, 7).to(self.device, dtype=torch.float32)
         self.softmax = nn.Softmax(dim=1).to(self.device, dtype=torch.float32)
 
     def forward(self, X):
@@ -48,21 +47,21 @@ def main(args):
     train_data_loader = DataLoader(
         train_dataset,
         num_workers=0,
-        batch_size=64,
+        batch_size=128,
         shuffle=True,
         drop_last=True,
     )
     val_data_loader = DataLoader(
         val_dataset,
-        batch_size=64,
+        batch_size=128,
         num_workers=0,
         shuffle=True,
         drop_last=True,
     )
 
     model = nn.DataParallel(NN(device)).to(device, dtype=torch.float32)
-    optimizer = torch.optim.SGD(model.parameters(), lr=0.0001)
-    scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.8, verbose=True)
+    optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
+    # scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.8, verbose=True)
     criterion = nn.CrossEntropyLoss().to(device, dtype=torch.float32)
 
     for epoch in range(100):
@@ -73,14 +72,14 @@ def main(args):
 
             loss = criterion(
                 y_hat,
-                nn.functional.one_hot(y_batch.long() % 7, num_classes=7).to(
+                nn.functional.one_hot(y_batch.long(), num_classes=7).to(
                     device, dtype=torch.float32
                 ),
             )
             loss.backward()
             optimizer.step()
 
-        scheduler.step()
+        # scheduler.step()
 
         val_acc = 0.0
         val_count = 0.0
@@ -90,7 +89,7 @@ def main(args):
 
             loss = criterion(
                 y_val_hat,
-                nn.functional.one_hot(y_val.long() % 7, num_classes=7).to(
+                nn.functional.one_hot(y_val.long(), num_classes=7).to(
                     device, dtype=torch.float32
                 ),
             )

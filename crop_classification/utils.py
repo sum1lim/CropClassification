@@ -11,6 +11,7 @@ def read_data():
     df = pd.read_csv("./data/WinnipegDataset.txt")
     Y = df["label"] - 1
     X = df.drop(["label"], axis=1)
+    X = (X - X.min(0)) / (X.max(0) - X.min(0))
     print(Y.value_counts())
 
     undersampler = RandomUnderSampler(random_state=42)
@@ -43,7 +44,6 @@ def softmax(X, W, t=None):
 
     # TODO Your code here
     z = np.dot(X, W)
-    print(z.shape)
     z -= np.array([np.max(z, axis=1)]).T
 
     y = np.exp(z) / np.array([np.sum(np.exp(z), axis=1)]).T

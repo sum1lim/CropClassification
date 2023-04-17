@@ -17,7 +17,7 @@ def read_data(balanced_test=True):
     print("Counts per class before undersampling:")
     print(y.value_counts())
 
-    _, X_te, _, y_te = train_test_split(X, y, test_size=0.2, random_state=42)
+    _, X_te, _, y_te = train_test_split(X, y, test_size=0.01, random_state=42)
     X = X.drop(X_te.index, axis=0)
     y = y.drop(y_te.index, axis=0)
 

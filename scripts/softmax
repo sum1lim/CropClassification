@@ -57,6 +57,8 @@ def main(args):
     # scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.8, verbose=True)
     criterion = nn.CrossEntropyLoss().to(device, dtype=torch.float32)
 
+    best_acc = 0.0
+    best_model = None
     for epoch in range(100):
         for X_batch, y_batch in train_data_loader:
             y_hat = model((X_batch.to(device, dtype=torch.float32)))
@@ -101,8 +103,12 @@ def main(args):
         print(
             f"Epoch {epoch}: Validation Loss: {val_loss / val_count} / Accuracy: {val_acc / val_count}"
         )
+        if best_acc < val_acc / val_count:
+            print("Update model")
+            best_acc = val_acc / val_count
+            best_model = model
 
-    y_te_hat = model((torch.tensor(X_te).to(device, dtype=torch.float32)))
+    y_te_hat = best_model((torch.tensor(X_te).to(device, dtype=torch.float32)))
     y_te_hat = torch.argmax(y_te_hat, dim=1)
     match = torch.tensor(Y_te).to(device, dtype=torch.float32) - y_te_hat
     match[match != 0] = -1

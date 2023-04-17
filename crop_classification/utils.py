@@ -7,16 +7,17 @@ from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset
 
 
-def read_data():
+def read_data(undersampling=True):
     df = pd.read_csv("./data/WinnipegDataset.txt")
     Y = df["label"] - 1
     X = df.drop(["label"], axis=1)
     X = (X - X.min(0)) / (X.max(0) - X.min(0))
     print(Y.value_counts())
 
-    undersampler = RandomUnderSampler(random_state=42)
-    X, Y = undersampler.fit_resample(X, Y)
-    print(Y.value_counts())
+    if undersampling:
+        undersampler = RandomUnderSampler(random_state=42)
+        X, Y = undersampler.fit_resample(X, Y)
+        print(Y.value_counts())
 
     X_tr, X_te, Y_tr, Y_te = train_test_split(X, Y, test_size=0.2, random_state=42)
 

@@ -12,6 +12,6 @@ setup(
     include_package_data=True,
     scripts="""
         ./scripts/softmax
-        ./scripts/NN
+        ./scripts/CNN
     """.split(),
 )

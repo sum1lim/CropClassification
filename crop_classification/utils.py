@@ -1,13 +1,12 @@
-import math
 import torch
-import numpy as np
 import pandas as pd
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset
+from sklearn.metrics import precision_recall_fscore_support, accuracy_score
 
 
-def read_data(balanced_test=True):
+def read_data():
     df = pd.read_csv("./data/WinnipegDataset.txt")
     y = df["label"] - 1
     X = df.drop(["label"], axis=1)[
@@ -17,30 +16,30 @@ def read_data(balanced_test=True):
     print("Counts per class before undersampling:")
     print(y.value_counts())
 
-    _, X_te, _, y_te = train_test_split(X, y, test_size=0.01, random_state=42)
+    _, X_te, _, y_te = train_test_split(X, y, test_size=0.005, random_state=42)
     X = X.drop(X_te.index, axis=0)
     y = y.drop(y_te.index, axis=0)
 
     undersampler = RandomUnderSampler(random_state=42)
     X, y = undersampler.fit_resample(X, y)
-    print("Counts per class after undersampling:")
-    print(y.value_counts())
-
-    X_tr, X_te_balanced, y_tr, y_te_balanced = train_test_split(
+    X_tr, X_balanced, y_tr, y_balanced = train_test_split(
         X, y, test_size=0.2, random_state=42
     )
-    if balanced_test:
-        X_te = X_te_balanced
-        y_te = y_te_balanced
 
-    print("Counts per class in the test dataset:")
+    print("Counts per class in the training dataset:")
+    print(y_tr.value_counts())
+    print("Counts per class in the imbalanced test dataset:")
     print(y_te.value_counts())
+    print("Counts per class in the balanced test datset:")
+    print(y_balanced.value_counts())
 
     return (
         X_tr.values,
         X_te.values,
+        X_balanced.values,
         y_tr.values,
         y_te.values,
+        y_balanced.values,
     )
 
 
@@ -57,3 +56,13 @@ class TorchDataset(Dataset):
 
     def __len__(self):
         return len(self.X)
+
+
+def print_metrics(y_pred, y_te):
+    acc = accuracy_score(y_pred, y_te)
+    p, r, f, _ = precision_recall_fscore_support(y_pred, y_te)
+
+    print(f"Test Accuracy: {acc}")
+    print(f"Precision: {list(p)}")
+    print(f"Recall: {list(r)}")
+    print(f"F1: {list(f)}")

@@ -57,13 +57,3 @@ class TorchDataset(Dataset):
 
     def __len__(self):
         return len(self.X)
-
-
-def accuracy(y, y_hat):
-    match = y - y_hat
-    match[match != 0] = -1
-    match += 1
-
-    acc = match.sum() / match.shape[0]
-
-    return acc

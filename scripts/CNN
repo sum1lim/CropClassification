@@ -5,8 +5,9 @@ import numpy as np
 import torch
 import torch.optim as optim
 from torch import nn
-from crop_classification.utils import read_data, TorchDataset, accuracy
+from crop_classification.utils import read_data, TorchDataset
 from torch.utils.data import DataLoader
+from sklearn.metrics import precision_recall_fscore_support, accuracy_score
 
 
 class CNN(nn.Module):
@@ -125,12 +126,16 @@ def main(args):
 
     X_te = torch.tensor(X_te)
     X_te = X_te.reshape(len(X_te), 2, 6)
-    y_te_hat = best_model((X_te.to(device, dtype=torch.float32)))
-    y_te_hat = torch.argmax(y_te_hat, dim=1)
+    y_pred = best_model((torch.tensor(X_te).to(device, dtype=torch.float32)))
+    y_pred = torch.argmax(y_te_hat, dim=1)
 
-    acc = accuracy(torch.tensor(y_te).to(device, dtype=torch.float32), y_te_hat)
+    acc = accuracy_score(y_pred, y_te)
+    p, r, f, _ = precision_recall_fscore_support(y_pred, y_te)
 
-    print(f"Test accuracy: {acc}")
+    print(f"Test Accuracy: {acc}")
+    print(f"Precision: {list(p)}")
+    print(f"Recall: {list(r)}")
+    print(f"F1: {list(f)}")
 
 
 if __name__ == "__main__":

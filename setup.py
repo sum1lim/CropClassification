@@ -14,5 +14,6 @@ setup(
         ./scripts/softmax
         ./scripts/CNN
         ./scripts/decision_tree
+        ./scripts/random_forest
     """.split(),
 )

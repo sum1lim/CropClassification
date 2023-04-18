@@ -11,7 +11,7 @@ class softmax_model(nn.Module):
         self.device = device
         super().__init__()
 
-        self.linear = nn.Linear(12, 7).to(self.device, dtype=torch.float32)
+        self.linear = nn.Linear(13, 7).to(self.device, dtype=torch.float32)
         self.softmax = nn.Softmax(dim=1).to(self.device, dtype=torch.float32)
 
     def forward(self, X):
@@ -58,6 +58,7 @@ def main():
     best_model = None
     for epoch in range(100):
         for X_batch, y_batch in train_data_loader:
+            X_batch = torch.concat([X_batch, torch.ones([len(X_batch), 1])], 1)
             y_hat = model((X_batch.to(device, dtype=torch.float32)))
 
             optimizer.zero_grad()
@@ -77,6 +78,7 @@ def main():
         val_count = 0.0
         val_loss = 0.0
         for X_val, y_val in val_data_loader:
+            X_val = torch.concat([X_val, torch.ones([len(X_val), 1])], 1)
             y_val_hat = model((X_val.to(device, dtype=torch.float32)))
 
             loss = criterion(
@@ -103,12 +105,16 @@ def main():
             best_model = model
 
     print("\nTest on imbalanced dataset:")
-    y_pred = best_model((torch.tensor(X_te).to(device, dtype=torch.float32)))
+    X_te = torch.concat([torch.tensor(X_te), torch.ones([len(X_te), 1])], 1)
+    y_pred = best_model((X_te.to(device, dtype=torch.float32)))
     y_pred = torch.argmax(y_pred, dim=1).cpu().numpy()
     print_metrics(y_pred, y_te)
 
     print("\nTest on balanced dataset:")
-    y_pred = best_model((torch.tensor(X_balanced).to(device, dtype=torch.float32)))
+    X_balanced = torch.concat(
+        [torch.tensor(X_balanced), torch.ones([len(X_balanced), 1])], 1
+    )
+    y_pred = best_model((X_balanced.to(device, dtype=torch.float32)))
     y_pred = torch.argmax(y_pred, dim=1).cpu().numpy()
     print_metrics(y_pred, y_balanced)
 

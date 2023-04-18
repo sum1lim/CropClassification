@@ -11,13 +11,13 @@ class CNN(nn.Module):
         self.device = device
         super().__init__()
 
-        self.conv1 = nn.Conv2d(1, 4, (3, 7))
+        self.conv1 = nn.Conv2d(1, 16, (3, 7))
         self.mlp = nn.Sequential(
-            nn.Linear(48, 32),
+            nn.Linear(192, 128),
             nn.ReLU(),
-            nn.Linear(32, 16),
+            nn.Linear(128, 32),
             nn.ReLU(),
-            nn.Linear(16, 7),
+            nn.Linear(32, 7),
         ).to(self.device, dtype=torch.float32)
 
         self.softmax = nn.Softmax(dim=1).to(self.device, dtype=torch.float32)

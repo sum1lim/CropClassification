@@ -4,3 +4,4 @@ scikit-learn
 imbalanced-learn
 torch
 matplotlib
+seaborn

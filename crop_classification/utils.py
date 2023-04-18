@@ -1,9 +1,13 @@
 import torch
+import seaborn as sns
+import matplotlib.pyplot as plt
 import pandas as pd
+import numpy as np
 from imblearn.under_sampling import RandomUnderSampler
 from sklearn.model_selection import train_test_split
 from torch.utils.data import Dataset
 from sklearn.metrics import precision_recall_fscore_support, accuracy_score
+from sklearn.metrics import confusion_matrix
 
 
 def read_data():
@@ -66,3 +70,9 @@ def print_metrics(y_pred, y_te):
     print(f"Precision: {list(p)}")
     print(f"Recall: {list(r)}")
     print(f"F1: {list(f)}")
+
+    cf_matrix = confusion_matrix(y_pred, y_te)
+    print(f"Per-class accuracies: {np.diagonal(cf_matrix) / np.sum(cf_matrix, 1)}")
+    sns.set(font_scale=0.5)
+    sns.heatmap(cf_matrix, annot=True, fmt="g")
+    plt.show()

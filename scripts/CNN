@@ -11,11 +11,11 @@ class CNN(nn.Module):
         self.device = device
         super().__init__()
 
-        self.conv1 = nn.Conv2d(1, 16, (3, 7))
+        self.conv1 = nn.Conv2d(1, 8, (3, 7))
         self.mlp = nn.Sequential(
-            nn.Linear(192, 128),
+            nn.Linear(96, 64),
             nn.ReLU(),
-            nn.Linear(128, 32),
+            nn.Linear(64, 32),
             nn.ReLU(),
             nn.Linear(32, 7),
         ).to(self.device, dtype=torch.float32)

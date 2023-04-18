@@ -14,7 +14,7 @@ def read_data():
     df = pd.read_csv("./data/WinnipegDataset.txt")
     y = df["label"] - 1
     X = df.drop(["label"], axis=1)[
-        [f"f{i + j}" for j in [1, 50, 99, 137] for i in range(3)]
+        [f"f{i + j}" for j in [1, 99, 50, 137] for i in range(3)]
     ]
     X = (X - X.min(0)) / (X.max(0) - X.min(0))
     print("Counts per class before undersampling:")

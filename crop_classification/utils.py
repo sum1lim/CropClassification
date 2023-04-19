@@ -27,7 +27,7 @@ def read_data():
     undersampler = RandomUnderSampler(random_state=42)
     X, y = undersampler.fit_resample(X, y)
     X_tr, X_balanced, y_tr, y_balanced = train_test_split(
-        X, y, test_size=0.2, random_state=42
+        X, y, test_size=0.2, random_state=42, stratify=y
     )
 
     print("Counts per class in the training dataset:")
@@ -71,8 +71,7 @@ def print_metrics(y_pred, y_te):
     print(f"Recall: {list(r)}")
     print(f"F1: {list(f)}")
 
-    cf_matrix = confusion_matrix(y_pred, y_te)
-    print(f"Per-class accuracies: {np.diagonal(cf_matrix) / np.sum(cf_matrix, 1)}")
+    cf_matrix = confusion_matrix(y_te, y_pred)
     sns.set(font_scale=0.5)
     sns.heatmap(cf_matrix, annot=True, fmt="g")
     plt.show()

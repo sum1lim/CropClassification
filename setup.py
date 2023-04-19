@@ -12,7 +12,7 @@ setup(
     include_package_data=True,
     scripts="""
         ./scripts/softmax
-        ./scripts/CNN
+        ./scripts/ANN
         ./scripts/decision_tree
         ./scripts/random_forest
     """.split(),

@@ -6,7 +6,7 @@ from torch.utils.data import DataLoader
 from sklearn.metrics import accuracy_score
 
 
-class CNN(nn.Module):
+class ANN(nn.Module):
     def __init__(self, device):
         self.device = device
         super().__init__()
@@ -61,7 +61,7 @@ def main():
         drop_last=True,
     )
 
-    model = nn.DataParallel(CNN(device)).to(device, dtype=torch.float32)
+    model = nn.DataParallel(ANN(device)).to(device, dtype=torch.float32)
     num_params = sum(p.numel() for p in model.parameters())
     print(f"Number of nodes: {num_params}")
 

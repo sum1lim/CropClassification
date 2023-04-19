@@ -62,6 +62,9 @@ def main():
     )
 
     model = nn.DataParallel(CNN(device)).to(device, dtype=torch.float32)
+    num_params = sum(p.numel() for p in model.parameters())
+    print(f"Number of nodes: {num_params}")
+
     optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
     # scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.8, verbose=True)
     criterion = nn.CrossEntropyLoss().to(device, dtype=torch.float32)

@@ -9,6 +9,13 @@ def main():
     clf = RandomForestClassifier(criterion="entropy")
     clf = clf.fit(X_tr, y_tr)
 
+    num_nodes = 0
+    trees = clf.estimators_
+    for tree in trees:
+        num_nodes += tree.tree_.node_count
+
+    print(f"Number of nodes: {num_nodes}")
+
     print("\nTest on imbalanced dataset:")
     y_pred = clf.predict(X_te)
     print_metrics(y_pred, y_te)

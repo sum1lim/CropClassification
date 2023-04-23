@@ -1,0 +1,250 @@
+cuda
+Counts per class before undersampling:
+label
+5    85074
+2    75673
+3    74067
+4    47117
+0    39162
+1     3598
+6     1143
+Name: count, dtype: int64
+Counts per class in the training dataset:
+label
+1    911
+0    911
+2    910
+6    910
+5    910
+3    910
+4    910
+Name: count, dtype: int64
+Counts per class in the imbalanced test dataset:
+label
+5    424
+2    385
+3    378
+4    216
+0    205
+1     17
+6      5
+Name: count, dtype: int64
+Counts per class in the balanced test datset:
+label
+5    228
+2    228
+6    228
+4    228
+3    228
+1    227
+0    227
+Name: count, dtype: int64
+Hyperparameter tuning: alpha = 10.0
+Epoch 0: Validation Loss: 2.019040107727051 / Accuracy: 0.14638157894736842
+Update model
+Epoch 1: Validation Loss: 2.0132834911346436 / Accuracy: 0.15213815789473684
+Update model
+Hyperparameter tuning: Update at alpha = 10.0
+Hyperparameter tuning: alpha = 3.0
+Epoch 0: Validation Loss: 1.718192219734192 / Accuracy: 0.515625
+Update model
+Epoch 1: Validation Loss: 1.541085958480835 / Accuracy: 0.6101973684210527
+Update model
+Epoch 2: Validation Loss: 1.3908977508544922 / Accuracy: 0.774671052631579
+Update model
+Epoch 3: Validation Loss: 1.242564082145691 / Accuracy: 0.9235197368421053
+Update model
+Epoch 4: Validation Loss: 1.2292743921279907 / Accuracy: 0.9350328947368421
+Update model
+Epoch 5: Validation Loss: 1.2223438024520874 / Accuracy: 0.9432565789473685
+Update model
+Epoch 6: Validation Loss: 1.2125693559646606 / Accuracy: 0.9539473684210527
+Update model
+Epoch 8: Validation Loss: 1.2093260288238525 / Accuracy: 0.9555921052631579
+Update model
+Epoch 11: Validation Loss: 1.2082890272140503 / Accuracy: 0.9580592105263158
+Update model
+Epoch 12: Validation Loss: 1.203665018081665 / Accuracy: 0.9613486842105263
+Update model
+Epoch 15: Validation Loss: 1.2046867609024048 / Accuracy: 0.9629934210526315
+Update model
+Epoch 25: Validation Loss: 1.2008025646209717 / Accuracy: 0.9654605263157895
+Update model
+Epoch 27: Validation Loss: 1.1981223821640015 / Accuracy: 0.9671052631578947
+Update model
+Epoch 38: Validation Loss: 1.1963051557540894 / Accuracy: 0.96875
+Update model
+Epoch 63: Validation Loss: 1.1956913471221924 / Accuracy: 0.9695723684210527
+Update model
+Hyperparameter tuning: Update at alpha = 3.0
+Hyperparameter tuning: alpha = 1.0
+Epoch 0: Validation Loss: 1.839343786239624 / Accuracy: 0.27631578947368424
+Update model
+Epoch 1: Validation Loss: 1.6592307090759277 / Accuracy: 0.5805921052631579
+Update model
+Epoch 2: Validation Loss: 1.4149434566497803 / Accuracy: 0.7631578947368421
+Update model
+Epoch 3: Validation Loss: 1.2293230295181274 / Accuracy: 0.9490131578947368
+Update model
+Epoch 4: Validation Loss: 1.2244809865951538 / Accuracy: 0.9523026315789473
+Update model
+Epoch 5: Validation Loss: 1.2193788290023804 / Accuracy: 0.9547697368421053
+Update model
+Epoch 7: Validation Loss: 1.2084261178970337 / Accuracy: 0.9605263157894737
+Update model
+Epoch 9: Validation Loss: 1.2025662660598755 / Accuracy: 0.9646381578947368
+Update model
+Epoch 10: Validation Loss: 1.2003203630447388 / Accuracy: 0.9671052631578947
+Update model
+Epoch 22: Validation Loss: 1.1966487169265747 / Accuracy: 0.9703947368421053
+Update model
+Epoch 27: Validation Loss: 1.1954251527786255 / Accuracy: 0.9720394736842105
+Update model
+Epoch 59: Validation Loss: 1.193978190422058 / Accuracy: 0.9736842105263158
+Update model
+Epoch 73: Validation Loss: 1.1907315254211426 / Accuracy: 0.9745065789473685
+Update model
+Epoch 75: Validation Loss: 1.1899921894073486 / Accuracy: 0.977796052631579
+Update model
+Hyperparameter tuning: Update at alpha = 1.0
+Hyperparameter tuning: alpha = 0.3
+Epoch 0: Validation Loss: 1.938484787940979 / Accuracy: 0.28125
+Update model
+Epoch 1: Validation Loss: 1.8620141744613647 / Accuracy: 0.28289473684210525
+Update model
+Epoch 2: Validation Loss: 1.7512110471725464 / Accuracy: 0.4629934210526316
+Update model
+Epoch 3: Validation Loss: 1.6651819944381714 / Accuracy: 0.5304276315789473
+Update model
+Epoch 4: Validation Loss: 1.4910664558410645 / Accuracy: 0.7294407894736842
+Update model
+Epoch 5: Validation Loss: 1.4062225818634033 / Accuracy: 0.7763157894736842
+Update model
+Epoch 6: Validation Loss: 1.3677308559417725 / Accuracy: 0.8083881578947368
+Update model
+Epoch 7: Validation Loss: 1.2985379695892334 / Accuracy: 0.8947368421052632
+Update model
+Epoch 9: Validation Loss: 1.2826060056686401 / Accuracy: 0.90625
+Update model
+Epoch 10: Validation Loss: 1.254124641418457 / Accuracy: 0.9210526315789473
+Update model
+Epoch 11: Validation Loss: 1.2298507690429688 / Accuracy: 0.946546052631579
+Update model
+Epoch 12: Validation Loss: 1.2225695848464966 / Accuracy: 0.9514802631578947
+Update model
+Epoch 13: Validation Loss: 1.2186328172683716 / Accuracy: 0.9523026315789473
+Update model
+Epoch 18: Validation Loss: 1.2143229246139526 / Accuracy: 0.9555921052631579
+Update model
+Epoch 19: Validation Loss: 1.2111657857894897 / Accuracy: 0.9605263157894737
+Update model
+Epoch 24: Validation Loss: 1.2090827226638794 / Accuracy: 0.962171052631579
+Update model
+Epoch 25: Validation Loss: 1.2065922021865845 / Accuracy: 0.9654605263157895
+Update model
+Epoch 37: Validation Loss: 1.1995035409927368 / Accuracy: 0.9671052631578947
+Update model
+Epoch 39: Validation Loss: 1.2015210390090942 / Accuracy: 0.9679276315789473
+Update model
+Epoch 43: Validation Loss: 1.2016619443893433 / Accuracy: 0.96875
+Update model
+Epoch 52: Validation Loss: 1.1977736949920654 / Accuracy: 0.9712171052631579
+Update model
+Epoch 93: Validation Loss: 1.195675015449524 / Accuracy: 0.9720394736842105
+Update model
+Hyperparameter tuning: alpha = 0.1
+Epoch 0: Validation Loss: 1.9401273727416992 / Accuracy: 0.13733552631578946
+Update model
+Epoch 2: Validation Loss: 1.919414758682251 / Accuracy: 0.13898026315789475
+Update model
+Epoch 3: Validation Loss: 1.9030191898345947 / Accuracy: 0.14884868421052633
+Update model
+Epoch 4: Validation Loss: 1.886829137802124 / Accuracy: 0.20888157894736842
+Update model
+Epoch 5: Validation Loss: 1.868549108505249 / Accuracy: 0.2689144736842105
+Update model
+Epoch 6: Validation Loss: 1.844382643699646 / Accuracy: 0.3832236842105263
+Update model
+Epoch 7: Validation Loss: 1.8111774921417236 / Accuracy: 0.5213815789473685
+Update model
+Epoch 9: Validation Loss: 1.7022162675857544 / Accuracy: 0.5271381578947368
+Update model
+Epoch 10: Validation Loss: 1.6378079652786255 / Accuracy: 0.6258223684210527
+Update model
+Epoch 11: Validation Loss: 1.5913883447647095 / Accuracy: 0.6381578947368421
+Update model
+Epoch 12: Validation Loss: 1.5170366764068604 / Accuracy: 0.8026315789473685
+Update model
+Epoch 15: Validation Loss: 1.3816972970962524 / Accuracy: 0.8157894736842105
+Update model
+Epoch 16: Validation Loss: 1.3511927127838135 / Accuracy: 0.890625
+Update model
+Epoch 19: Validation Loss: 1.301959753036499 / Accuracy: 0.8988486842105263
+Update model
+Epoch 22: Validation Loss: 1.2806757688522339 / Accuracy: 0.9004934210526315
+Update model
+Epoch 23: Validation Loss: 1.2744526863098145 / Accuracy: 0.9021381578947368
+Update model
+Epoch 24: Validation Loss: 1.2786588668823242 / Accuracy: 0.9054276315789473
+Update model
+Epoch 25: Validation Loss: 1.2652140855789185 / Accuracy: 0.9136513157894737
+Update model
+Epoch 29: Validation Loss: 1.2557348012924194 / Accuracy: 0.9210526315789473
+Update model
+Epoch 30: Validation Loss: 1.254483938217163 / Accuracy: 0.9226973684210527
+Update model
+Epoch 33: Validation Loss: 1.2445563077926636 / Accuracy: 0.9292763157894737
+Update model
+Epoch 34: Validation Loss: 1.2414363622665405 / Accuracy: 0.9333881578947368
+Update model
+Epoch 37: Validation Loss: 1.2353675365447998 / Accuracy: 0.9358552631578947
+Update model
+Epoch 38: Validation Loss: 1.2343885898590088 / Accuracy: 0.9375
+Update model
+Epoch 39: Validation Loss: 1.2271579504013062 / Accuracy: 0.9481907894736842
+Update model
+Epoch 46: Validation Loss: 1.2211228609085083 / Accuracy: 0.9514802631578947
+Update model
+Epoch 50: Validation Loss: 1.217626929283142 / Accuracy: 0.9539473684210527
+Update model
+Epoch 52: Validation Loss: 1.2165329456329346 / Accuracy: 0.9555921052631579
+Update model
+Epoch 55: Validation Loss: 1.2143821716308594 / Accuracy: 0.9564144736842105
+Update model
+Epoch 56: Validation Loss: 1.2132186889648438 / Accuracy: 0.9572368421052632
+Update model
+Epoch 59: Validation Loss: 1.214074730873108 / Accuracy: 0.9588815789473685
+Update model
+Epoch 61: Validation Loss: 1.2088642120361328 / Accuracy: 0.9613486842105263
+Update model
+Epoch 62: Validation Loss: 1.210668921470642 / Accuracy: 0.962171052631579
+Update model
+Epoch 72: Validation Loss: 1.207537055015564 / Accuracy: 0.9638157894736842
+Update model
+Epoch 87: Validation Loss: 1.2026262283325195 / Accuracy: 0.9662828947368421
+Update model
+Epoch 98: Validation Loss: 1.2026225328445435 / Accuracy: 0.9671052631578947
+Update model
+Number of parameters: 3511
+
+Test on imbalanced dataset:
+Test Accuracy: 0.9503067484662576
+   Precision    Recall        F1
+0   0.956098  0.951456  0.953771
+1   1.000000  0.894737  0.944444
+2   0.989610  0.981959  0.985770
+3   0.957672  0.978378  0.967914
+4   0.916667  0.857143  0.885906
+5   0.919811  0.960591  0.939759
+6   1.000000  0.500000  0.666667
+
+Test on balanced dataset:
+Test Accuracy: 0.966750313676286
+   Precision    Recall        F1
+0   0.964758  0.973333  0.969027
+1   0.995595  0.949580  0.972043
+2   0.982456  0.995556  0.988962
+3   0.956140  0.964602  0.960352
+4   0.912281  0.958525  0.934831
+5   0.960526  0.939914  0.950108
+6   0.995614  0.986957  0.991266

@@ -11,6 +11,7 @@ setup(
     packages=["crop_classification"],
     include_package_data=True,
     scripts="""
+        ./scripts/baseline
         ./scripts/softmax
         ./scripts/ANN
         ./scripts/decision_tree

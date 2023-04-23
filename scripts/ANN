@@ -11,13 +11,13 @@ class ANN(nn.Module):
         self.device = device
         super().__init__()
 
-        self.conv1 = nn.Conv2d(1, 8, (3, 7))
+        self.conv1 = nn.Conv2d(1, 16, (3, 7))
         self.mlp = nn.Sequential(
-            nn.Linear(96, 64),
+            nn.Linear(192, 128),
             nn.ReLU(),
-            nn.Linear(64, 32),
+            nn.Linear(128, 64),
             nn.ReLU(),
-            nn.Linear(32, 7),
+            nn.Linear(64, 7),
         ).to(self.device, dtype=torch.float32)
 
         self.softmax = nn.Softmax(dim=1).to(self.device, dtype=torch.float32)
@@ -61,63 +61,73 @@ def main():
         drop_last=True,
     )
 
-    model = nn.DataParallel(ANN(device)).to(device, dtype=torch.float32)
-    num_params = sum(p.numel() for p in model.parameters())
-    print(f"Number of nodes: {num_params}")
+    best_acc_of_all = 0
+    best_model_of_all = None
+    for alpha in [10.0, 3.0, 1.0, 0.3, 0.1]:
+        print(f"Hyperparameter tuning: alpha = {alpha}")
 
-    optimizer = torch.optim.SGD(model.parameters(), lr=0.1)
-    # scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.8, verbose=True)
-    criterion = nn.CrossEntropyLoss().to(device, dtype=torch.float32)
+        model = nn.DataParallel(ANN(device)).to(device, dtype=torch.float32)
+        optimizer = torch.optim.SGD(model.parameters(), lr=alpha)
+        # scheduler = optim.lr_scheduler.ExponentialLR(optimizer, gamma=0.8, verbose=True)
+        criterion = nn.CrossEntropyLoss().to(device, dtype=torch.float32)
 
-    best_acc = 0.0
-    best_model = None
-    for epoch in range(100):
-        for X_batch, y_batch in train_data_loader:
-            X_batch = X_batch.reshape(len(X_batch), 2, 6)
-            y_hat = model((X_batch.to(device, dtype=torch.float32)))
+        best_acc = 0.0
+        best_model = None
+        for epoch in range(100):
+            for X_batch, y_batch in train_data_loader:
+                X_batch = X_batch.reshape(len(X_batch), 2, 6)
+                y_hat = model((X_batch.to(device, dtype=torch.float32)))
 
-            optimizer.zero_grad()
+                optimizer.zero_grad()
 
-            loss = criterion(
-                y_hat,
-                nn.functional.one_hot(y_batch.long(), num_classes=7).to(
-                    device, dtype=torch.float32
-                ),
-            )
-            loss.backward()
-            optimizer.step()
+                loss = criterion(
+                    y_hat,
+                    nn.functional.one_hot(y_batch.long(), num_classes=7).to(
+                        device, dtype=torch.float32
+                    ),
+                )
+                loss.backward()
+                optimizer.step()
 
-        # scheduler.step()
+            # scheduler.step()
 
-        val_acc = 0.0
-        val_count = 0.0
-        val_loss = 0.0
-        for X_val, y_val in val_data_loader:
-            X_val = X_val.reshape(len(X_val), 2, 6)
-            y_val_hat = model((X_val.to(device, dtype=torch.float32)))
+            val_acc = 0.0
+            val_count = 0.0
+            val_loss = 0.0
+            for X_val, y_val in val_data_loader:
+                X_val = X_val.reshape(len(X_val), 2, 6)
+                y_val_hat = model((X_val.to(device, dtype=torch.float32)))
 
-            loss = criterion(
-                y_val_hat,
-                nn.functional.one_hot(y_val.long(), num_classes=7).to(
-                    device, dtype=torch.float32
-                ),
-            )
+                loss = criterion(
+                    y_val_hat,
+                    nn.functional.one_hot(y_val.long(), num_classes=7).to(
+                        device, dtype=torch.float32
+                    ),
+                )
 
-            y_val_hat = torch.argmax(y_val_hat, dim=1)
+                y_val_hat = torch.argmax(y_val_hat, dim=1)
 
-            acc = accuracy_score(y_val.cpu().numpy(), y_val_hat.cpu().numpy())
+                acc = accuracy_score(y_val.cpu().numpy(), y_val_hat.cpu().numpy())
 
-            val_loss += loss * len(X_val)
-            val_acc += acc * len(X_val)
-            val_count += len(X_val)
+                val_loss += loss * len(X_val)
+                val_acc += acc * len(X_val)
+                val_count += len(X_val)
 
-        print(
-            f"Epoch {epoch}: Validation Loss: {val_loss / val_count} / Accuracy: {val_acc / val_count}"
-        )
-        if best_acc < val_acc / val_count:
-            print("Update model")
-            best_acc = val_acc / val_count
-            best_model = model
+            if best_acc < val_acc / val_count:
+                print(
+                    f"Epoch {epoch}: Validation Loss: {val_loss / val_count} / Accuracy: {val_acc / val_count}"
+                )
+                print("Update model")
+                best_acc = val_acc / val_count
+                best_model = model
+
+        if best_acc_of_all < best_acc:
+            print(f"Hyperparameter tuning: Update at alpha = {alpha}")
+            best_acc_of_all = best_acc
+            best_model_of_all = model
+
+    num_params = sum(p.numel() for p in best_model_of_all.parameters())
+    print(f"Number of parameters: {num_params}")
 
     print("\nTest on imbalanced dataset:")
     X_te = torch.tensor(X_te)

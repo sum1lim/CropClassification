@@ -16,7 +16,6 @@ def read_data():
     X = df.drop(["label"], axis=1)[
         [f"f{i + j}" for j in [1, 99, 50, 137] for i in range(3)]
     ]
-    X = (X - X.min(0)) / (X.max(0) - X.min(0))
     print("Counts per class before undersampling:")
     print(y.value_counts())
 
@@ -36,6 +35,11 @@ def read_data():
     print(y_te.value_counts())
     print("Counts per class in the balanced test datset:")
     print(y_balanced.value_counts())
+
+    # min-max normalization
+    X_te = (X_te - X_tr.min(0)) / (X_tr.max(0) - X_tr.min(0))
+    X_balanced = (X_balanced - X_tr.min(0)) / (X_tr.max(0) - X_tr.min(0))
+    X_tr = (X_tr - X_tr.min(0)) / (X_tr.max(0) - X_tr.min(0))
 
     return (
         X_tr.values,
@@ -67,9 +71,8 @@ def print_metrics(y_pred, y_te):
     p, r, f, _ = precision_recall_fscore_support(y_pred, y_te)
 
     print(f"Test Accuracy: {acc}")
-    print(f"Precision: {list(p)}")
-    print(f"Recall: {list(r)}")
-    print(f"F1: {list(f)}")
+
+    print(pd.DataFrame({"Precision": p, "Recall": r, "F1": f}))
 
     cf_matrix = confusion_matrix(y_te, y_pred)
     sns.set(font_scale=0.5)
